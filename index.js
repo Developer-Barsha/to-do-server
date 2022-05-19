@@ -17,11 +17,13 @@ async function run() {
     const taskCollection = client.db('todo-app').collection('task');
 
     try {
+        // get api for all tasks
         app.get('/tasks', async (req, res) => {
             const tasks = await taskCollection.find().toArray();
             res.send(tasks);
         });
 
+        // get api for users by email
         app.get('/tasks/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
@@ -29,12 +31,14 @@ async function run() {
             res.send(tasks);
         });
 
+        // post api
         app.post('/tasks', async (req, res) => {
             const task = req.body;
             const result = await taskCollection.insertOne(task);
             res.send(result);
         })
 
+        // put api
         app.put('/tasks/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
@@ -46,6 +50,7 @@ async function run() {
             res.send(result)
         })
 
+        // delete api
         app.delete('/tasks/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
